@@ -2,33 +2,63 @@ using UnityEngine;
 
 public class ModelInteraction : MonoBehaviour
 {
-    // How fast the model rotates and moves with the mouse
-    public float Speed = 5;
+    public float rotateSpeed = 5f;
+    public float zoomSpeed = 5f;
     public Camera mainCamera;
     private float cameraZDistance;
 
+    private Vector3 initialModelPosition;
+    private Quaternion initialModelRotation;
+    private Vector3 initialCameraPosition;
+    private Quaternion initialCameraRotation;
+
     void Start()
     {
-        // Grab the main camera and store how far the model is from it on the Z axis
         mainCamera = Camera.main;
         cameraZDistance = mainCamera.WorldToScreenPoint(transform.position).z;
+
+        initialModelPosition = transform.position;
+        initialModelRotation = transform.rotation;
+        initialCameraPosition = mainCamera.transform.position;
+        initialCameraRotation = mainCamera.transform.rotation;
     }
 
     void Update()
     {
-        // Left click to rotate the model based on mouse movement
+        // Left click: full 360-degree rotation on all axes without gimbal lock
         if (Input.GetMouseButton(0))
         {
-            transform.eulerAngles += Speed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+            transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * rotateSpeed, Space.World);
+            transform.Rotate(Vector3.right, -Input.GetAxis("Mouse Y") * rotateSpeed, Space.World);
         }
 
-        // Right click to move the model to follow the mouse position in world space
+        // Right click: pan the model to follow the mouse in world space
         if (Input.GetMouseButton(1))
         {
-            // Keep the original Z distance from the camera when converting to world position
             Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cameraZDistance);
-            Vector3 newWorldPosition = mainCamera.ScreenToWorldPoint(screenPosition);
-            transform.position = newWorldPosition;
+            transform.position = mainCamera.ScreenToWorldPoint(screenPosition);
+        }
+
+        // I to zoom in, O to zoom out
+        if (Input.GetKey(KeyCode.I))
+        {
+            mainCamera.transform.position += mainCamera.transform.forward * zoomSpeed * Time.deltaTime;
+            cameraZDistance = mainCamera.WorldToScreenPoint(transform.position).z;
+        }
+        if (Input.GetKey(KeyCode.O))
+        {
+            mainCamera.transform.position -= mainCamera.transform.forward * zoomSpeed * Time.deltaTime;
+            cameraZDistance = mainCamera.WorldToScreenPoint(transform.position).z;
+        }
+
+        // R to reset model and camera to their starting state
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            transform.position = initialModelPosition;
+            transform.rotation = initialModelRotation;
+            mainCamera.transform.position = initialCameraPosition;
+            mainCamera.transform.rotation = initialCameraRotation;
+            cameraZDistance = mainCamera.WorldToScreenPoint(transform.position).z;
         }
     }
 }
