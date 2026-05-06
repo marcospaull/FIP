@@ -19,6 +19,9 @@ public class UIController : MonoBehaviour
     // Text component that displays the AI's response
     public TMPro.TMP_Text aiText;
 
+    // ScrollRect wrapping the AI response text so the user can scroll through it
+    public ScrollRect scrollView;
+
     // The submit button the user clicks to send their message
     public UnityEngine.UI.Button submit;
 
@@ -78,5 +81,14 @@ public class UIController : MonoBehaviour
     {
         Debug.Log(reply);
         aiText.text = reply;
+        ScrollToBottom();
+    }
+
+    // Forces the scroll view to resize its content and jump to the bottom
+    private void ScrollToBottom()
+    {
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(scrollView.content);
+        scrollView.verticalNormalizedPosition = 0f;
     }
 }
