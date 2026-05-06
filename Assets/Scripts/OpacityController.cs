@@ -21,6 +21,9 @@ public class OpacityController : MonoBehaviour
     // The button that shows/hides the opacity panel
     public Button opacityButton;
 
+    // Reference to the model interaction script to lock rotation when panel is open
+    public ModelInteraction modelInteraction;
+
     private bool isPanelVisible = false;
 
     void Start()
@@ -53,11 +56,13 @@ public class OpacityController : MonoBehaviour
         BuildSliders();
     }
 
-    // Toggles the opacity panel
+    // Toggles the opacity panel and locks/unlocks model rotation accordingly
     void TogglePanel()
     {
         isPanelVisible = !isPanelVisible;
         opacityPanel.SetActive(isPanelVisible);
+        if (modelInteraction != null)
+            modelInteraction.canRotate = !isPanelVisible;
     }
 
     // Creates one labeled slider row per child of the target parent

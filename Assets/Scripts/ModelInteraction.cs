@@ -13,6 +13,9 @@ public class ModelInteraction : MonoBehaviour
     public Camera mainCamera;
     private float cameraZDistance;
 
+    // Set to false externally (e.g. by OpacityController) to lock rotation
+    public bool canRotate = true;
+
     private Vector3 initialModelPosition;
     private Quaternion initialModelRotation;
     private Vector3 initialCameraPosition;
@@ -32,7 +35,7 @@ public class ModelInteraction : MonoBehaviour
     void Update()
     {
         // Left click: full 360-degree rotation on all axes without gimbal lock
-        if (Input.GetMouseButton(0))
+        if (canRotate && Input.GetMouseButton(0))
         {
             transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * rotateSpeed, Space.World);
             transform.Rotate(Vector3.right, -Input.GetAxis("Mouse Y") * rotateSpeed, Space.World);
@@ -45,13 +48,13 @@ public class ModelInteraction : MonoBehaviour
             transform.position = mainCamera.ScreenToWorldPoint(screenPosition);
         }
 
-        // I to zoom in, O to zoom out
-        if (Input.GetKey(KeyCode.I))
+        // 9 to zoom in, 0 to zoom out
+        if (Input.GetKey(KeyCode.Alpha9))
         {
             mainCamera.transform.position += mainCamera.transform.forward * zoomSpeed * Time.deltaTime;
             cameraZDistance = mainCamera.WorldToScreenPoint(transform.position).z;
         }
-        if (Input.GetKey(KeyCode.O))
+        if (Input.GetKey(KeyCode.Alpha0))
         {
             mainCamera.transform.position -= mainCamera.transform.forward * zoomSpeed * Time.deltaTime;
             cameraZDistance = mainCamera.WorldToScreenPoint(transform.position).z;
