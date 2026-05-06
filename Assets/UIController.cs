@@ -4,6 +4,7 @@
 // Description: Manages the chat UI, sending user input to a local LLM character and
 //              displaying the AI response. Also controls the hide/show toggle for the panel.
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -31,7 +32,11 @@ public class UIController : MonoBehaviour
     // The hide/show toggle button that stays visible at all times
     public UnityEngine.UI.Button hideButton;
 
+    // Stops generation and clears both text fields
+    public UnityEngine.UI.Button clearButton;
+
     private bool isUIVisible = true;
+    private Coroutine scrollCoroutine;
 
     void Start()
     {
@@ -40,6 +45,9 @@ public class UIController : MonoBehaviour
 
         // Listen for when the hide button is clicked
         hideButton.onClick.AddListener(OnHideButtonClick);
+
+        // Listen for when the clear button is clicked
+        clearButton.onClick.AddListener(OnClearButtonClick);
     }
 
     // Called when the user clicks the submit button
@@ -76,18 +84,30 @@ public class UIController : MonoBehaviour
         chatPanel.SetActive(isUIVisible);
     }
 
-    // Called by the LLM when it finishes generating a response
-    private void HandleReply(string reply)
+    // Stops any active generation and clears both text fields
+    void OnClearButtonClick()
     {
-        Debug.Log(reply);
-        aiText.text = reply;
-        ScrollToBottom();
+        llmCharacter.CancelRequests();
+        aiText.text = "";
+        playerText.text = "";
     }
 
-    // Forces the scroll view to resize its content and jump to the bottom
-    private void ScrollToBottom()
+    // Called by the LLM on each streamed token and when generation finishes
+    private void HandleReply(string reply)
     {
-        Canvas.ForceUpdateCanvases();
+        aiText.text = reply;
+
+        // Only start one scroll coroutine per frame to avoid freezing from
+        // running expensive layout operations on every streamed token
+        if (scrollCoroutine != null)
+            StopCoroutine(scrollCoroutine);
+        scrollCoroutine = StartCoroutine(ScrollToBottomNextFrame());
+    }
+
+    // Waits one frame so the layout has time to update, then scrolls to the bottom
+    private IEnumerator ScrollToBottomNextFrame()
+    {
+        yield return new WaitForEndOfFrame();
         LayoutRebuilder.ForceRebuildLayoutImmediate(scrollView.content);
         scrollView.verticalNormalizedPosition = 0f;
     }
