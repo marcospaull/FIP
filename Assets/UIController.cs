@@ -27,7 +27,6 @@ public class UIController : MonoBehaviour
 
     // The hide/show toggle button that stays visible at all times
     public UnityEngine.UI.Button hideButton;
-    public TMPro.TMP_Text hideButtonText;
 
     private bool isUIVisible = true;
 
@@ -67,12 +66,11 @@ public class UIController : MonoBehaviour
         llmCharacter.Chat(playerText.text, HandleReply);
     }
 
-    // Toggles the chat panel on/off and updates the button label
+    // Toggles the chat panel on/off
     void OnHideButtonClick()
     {
         isUIVisible = !isUIVisible;
         chatPanel.SetActive(isUIVisible);
-        hideButtonText.text = isUIVisible ? "Hide UI" : "Show UI";
     }
 
     // Called by the LLM when it finishes generating a response

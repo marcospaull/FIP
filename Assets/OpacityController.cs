@@ -20,7 +20,6 @@ public class OpacityController : MonoBehaviour
 
     // The button that shows/hides the opacity panel
     public Button opacityButton;
-    public TMP_Text opacityButtonText;
 
     private bool isPanelVisible = false;
 
@@ -54,12 +53,11 @@ public class OpacityController : MonoBehaviour
         BuildSliders();
     }
 
-    // Toggles the opacity panel and updates the button label
+    // Toggles the opacity panel
     void TogglePanel()
     {
         isPanelVisible = !isPanelVisible;
         opacityPanel.SetActive(isPanelVisible);
-        opacityButtonText.text = isPanelVisible ? "Hide Opacity" : "Opacity";
     }
 
     // Creates one labeled slider row per child of the target parent
