@@ -1,3 +1,9 @@
+// Name: Paul Lewis Marcos
+// Date: February 20, 2026
+// Assignment: CS 152 Project - Programming Paradigms
+// Description: Manages the chat UI, sending user input to a local LLM character and
+//              displaying the AI response. Also controls the hide/show toggle for the panel.
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;

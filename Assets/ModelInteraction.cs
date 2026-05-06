@@ -1,3 +1,9 @@
+// Name: Paul Lewis Marcos
+// Date: February 20, 2026
+// Assignment: CS 152 Project - Programming Paradigms
+// Description: Handles all 3D model interaction in the scene, including mouse-driven
+//              rotation and panning, keyboard zoom (I/O), and a full transform reset (R).
+
 using UnityEngine;
 
 public class ModelInteraction : MonoBehaviour

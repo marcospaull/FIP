@@ -1,3 +1,9 @@
+// Name: Paul Lewis Marcos
+// Date: February 20, 2026
+// Assignment: CS 152 Project - Programming Paradigms
+// Description: Provides Unity Editor menu items to download, enable, and check the status
+//              of the SimpleITK medical imaging library used for DICOM processing.
+
 using UnityEditor;
 using UnityVolumeRendering;
 

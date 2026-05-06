@@ -1,3 +1,9 @@
+// Name: Paul Lewis Marcos
+// Date: February 20, 2026
+// Assignment: CS 152 Project - Programming Paradigms
+// Description: Unity Editor window that reconstructs a 3D mesh from a DICOM medical scan
+//              using SimpleITK for resampling and the Marching Cubes algorithm for surface extraction.
+
 using UnityEngine;
 using UnityEditor;
 using System.IO;
